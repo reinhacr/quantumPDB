@@ -40,6 +40,8 @@ def rename_and_clean_resnames(input_pdb, output_pdb):
                     residue_info[key] = {
                         'residue_name': residue_name,
                         'atoms': set()
+                        'chain_id': chain_id,
+                        'residue_id': residue_id
                     }
                 residue_info[key]['atoms'].add(atom_name)
 
@@ -57,11 +59,12 @@ def rename_and_clean_resnames(input_pdb, output_pdb):
                     info['new_name'] = info['residue_name']
             else:
                 info['new_name'] = info['residue_name']
-
+            # print the N and C terminal residues out for indentification     
             if 'OXT' in atoms:
                 info['new_name'] = 'C' + info['new_name']
-
-            if {'N', 'H1', 'H2', 'H3'} <= atoms:
+                print(f"OXT found in residue: {info['residue_name']} {info['chain_id']} {info['residue_id']}")
+            elif {'N', 'H1', 'H2', 'H3'} <= atoms:
+                print(f"N Ter found in residue: {info['residue_name']} {info['chain_id']} {info['residue_id']}")
                 info['new_name'] = 'N' + info['new_name']
 
         # Write the modified PDB file with the new residue names
